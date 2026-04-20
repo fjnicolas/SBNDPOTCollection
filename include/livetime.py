@@ -169,6 +169,11 @@ def extract_livetime_info(run, plot_end, verbose=False):
         existing_df = pd.DataFrame()
         print("No existing ' sbnd_livetime_' + run + '.csv' found, will download all intervals.")
 
+    print(existing_df.tail())
+    # Always update the last interval, since it may be still running and the existing value may be outdated
+    existing_df = existing_df[0:-1]
+    print(existing_df.tail())
+
     # Split intervals into cached vs needs download
     cached_pairs = []
     to_download = []
@@ -224,6 +229,8 @@ def extract_livetime_info(run, plot_end, verbose=False):
 
     if(verbose):
         display(new_df.head(20))
+        display(new_df.tail(20))
+        
     new_df.to_csv(str(DATA_CSV_DIR) + '/sbnd_livetime_' + run + '.csv', index=True)
 
 def update_run_accumulated_livetime(run):
