@@ -17,7 +17,7 @@ plt.style.use('include/style.mplstyle')
 
 
 # Settings
-NAP_TIME = 10  # in second
+NAP_TIME = 60  # in second
 RUN_PERIOD = "run2"
 
 # Establish Redis connection

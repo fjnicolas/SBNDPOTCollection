@@ -3,3 +3,5 @@ __pycache__/*
 __pycache__
 redis_settings.py
 .DS_Store
+plots/*
+venv-sbndpot/*

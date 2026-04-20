@@ -85,7 +85,7 @@ def plot_weekly_livetime(plot_start, plot_end, run_period):
     # Save the figure
     figure.savefig(str(PLOT_DIR) + '/daq_weekly_livetime.png', dpi=1000, bbox_inches='tight')
     figure.savefig(str(PLOT_DIR) + '/daq_weekly_livetime.pdf', dpi=1000, bbox_inches='tight')
-    figure.savefig(str(PLOT_DIR) + '/daq_weekly_livetime_light.png', dpi=50, bbox_inches='tight')
+    figure.savefig(str(PLOT_DIR) + '/daq_weekly_livetime_light.png', dpi=75, bbox_inches='tight')
 
 
 def plot_weekly_potefficiency(plot_start, plot_end, run_period):
@@ -164,7 +164,7 @@ def plot_weekly_potefficiency(plot_start, plot_end, run_period):
     # Save the figure
     figure.savefig(str(PLOT_DIR) + '/pot_weekly_collection_efficiency.png', dpi=1000, bbox_inches='tight')
     figure.savefig(str(PLOT_DIR) + '/pot_weekly_collection_efficiency.pdf', dpi=1000, bbox_inches='tight')
-    figure.savefig(str(PLOT_DIR) + '/pot_weekly_collection_efficiency_light.png', dpi=50, bbox_inches='tight')
+    figure.savefig(str(PLOT_DIR) + '/pot_weekly_collection_efficiency_light.png', dpi=75, bbox_inches='tight')
 
 
 def plot_run2_cumulative(endTime):
@@ -268,7 +268,7 @@ def plot_run2_cumulative(endTime):
     figure.suptitle('SBND Run 2 Cumulative POT')
     figure.savefig( str(PLOT_DIR) + '/livetime_pot_cumulative_run2.png', dpi=1000, bbox_inches='tight')
     figure.savefig( str(PLOT_DIR) + '/livetime_pot_cumulative_run2.pdf', dpi=1000, bbox_inches='tight')
-    figure.savefig( str(PLOT_DIR) + '/livetime_pot_cumulative_run2_light.png', dpi=50, bbox_inches='tight')
+    figure.savefig( str(PLOT_DIR) + '/livetime_pot_cumulative_run2_light.png', dpi=75, bbox_inches='tight')
 
 
 
@@ -434,4 +434,4 @@ def plot_total_cumulative(endTime, addProjection = False):
     figure.suptitle('SBND Run 1+2 Cumulative POT')
     figure.savefig( str(PLOT_DIR) + '/livetime_pot_cumulative_run1+2.png', dpi=1000, bbox_inches='tight')
     figure.savefig( str(PLOT_DIR) + '/livetime_pot_cumulative_run1+2.pdf', dpi=1000, bbox_inches='tight')
-    figure.savefig( str(PLOT_DIR) + '/livetime_pot_cumulative_run1+2_light.png', dpi=50, bbox_inches='tight')
+    figure.savefig( str(PLOT_DIR) + '/livetime_pot_cumulative_run1+2_light.png', dpi=75, bbox_inches='tight')
