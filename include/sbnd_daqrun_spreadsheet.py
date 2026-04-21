@@ -6,6 +6,13 @@ from config import DATA_DIR
 
 gspread_url = "https://docs.google.com/spreadsheets/d/1LfNJ11Bbob8WQSgDakEVNZQ-OBHmskYqF0NADQM9kJM/export?format=csv"
 
+def is_valid_time_format(s):
+    try:
+        pd.to_datetime(s, format='%Y-%m-%d %H:%M:%S')
+        return True
+    except ValueError:
+        return False
+
 def update_daq_runs(run_period, verbose=False):
 
     # output_path is in  'PosixPath' format, convert it to string
@@ -39,6 +46,9 @@ def update_daq_runs(run_period, verbose=False):
 
     # Remove bad rows
     df = df[df['Run'].notna() & df['Start time'].notna()]
+
+    # Make sure the start/end time row match a time format
+    df = df[df['Start time'].apply(is_valid_time_format)]
 
     # If the end time contains 'Running', replace it with a string "now"
     df['End time'] = df['End time'].apply(lambda x: "now" if isinstance(x, str) and 'Running' in x else x)
