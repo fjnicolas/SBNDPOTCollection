@@ -17,7 +17,7 @@ plt.style.use('include/style.mplstyle')
 
 
 # Settings
-NAP_TIME = 60  # in second
+NAP_TIME = 3600  # in second
 RUN_PERIOD = "run2"
 
 # Establish Redis connection
@@ -51,7 +51,7 @@ try:
       print("Making run 2 cumulative plots...")
       plotting_macros.plot_run2_cumulative(plot_end)
       
-      plotting_macros.plot_total_cumulative(plot_end, True)
+      plotting_macros.plot_total_cumulative(plot_end, False)
 
       ## Pushing plot to Redis
       if redis_client is not None:
