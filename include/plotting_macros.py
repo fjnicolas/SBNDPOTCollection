@@ -15,7 +15,7 @@ from config import DATA_DIR, DATA_CSV_DIR
 from config import RUN1_START_TIME, RUN2_START_TIME
 from config import DELTA_T
 
-def plot_weekly_livetime(plot_start, plot_end, run_period):
+def plot_weekly_livetime(plot_start, plot_end, run_period, rebin = 1):
 
     # Read the livetime CSV file for the specified run period
     livetime_df = pd.read_csv(str(DATA_CSV_DIR)+'/sbnd_livetime_'+run_period+'.csv')
@@ -27,6 +27,22 @@ def plot_weekly_livetime(plot_start, plot_end, run_period):
     # Reduce the dataframe to only the rows that overlap with the plot range
     mask = (livetime_df['start'] < plot_end) & (livetime_df['end'] > plot_start)
     livetime_df = livetime_df[mask].reset_index(drop=True)
+
+    if rebin:
+        # Do a rebinning of the dataframe 
+        livetime_df = livetime_df.sort_values('start').reset_index(drop=True)
+        rebinned_rows = []
+        for i in range(0, len(livetime_df), rebin):
+            chunk = livetime_df.iloc[i:i+rebin]
+            if len(chunk) == 0:
+                continue
+            rebinned_row = {
+                'start': chunk['start'].min(),
+                'end': chunk['end'].max(),
+                'livetime_fraction': np.mean(chunk['livetime_fraction']),
+            }
+            rebinned_rows.append(rebinned_row)
+        livetime_df = pd.DataFrame(rebinned_rows)
 
     # Figure creation
     figure = plt.figure(figsize=(12, 5))
@@ -66,7 +82,7 @@ def plot_weekly_livetime(plot_start, plot_end, run_period):
     # Add the average livetime to the legend, but with a "blank" handle
     h.append(plt.Line2D([0], [0], color='white', lw=0))
     l.append(f'Average Livetime: {avg_livetime:.1%}')
-    ax.legend(h, l)
+    ax.legend(h, l, fontsize=16)
     _ = ax.set_title('SBND DAQ Livetime')
 
     # Add top right corner: run period and month range
@@ -88,7 +104,7 @@ def plot_weekly_livetime(plot_start, plot_end, run_period):
     figure.savefig(str(PLOT_DIR) + '/daq_weekly_livetime_light.png', dpi=75, bbox_inches='tight')
 
 
-def plot_weekly_potefficiency(plot_start, plot_end, run_period):
+def plot_weekly_potefficiency(plot_start, plot_end, run_period, rebin = 1):
   
     # Read the livetime CSV file for the week of interest
     livetime_df = pd.read_csv(str(DATA_CSV_DIR) + '/sbnd_livetime_' + run_period + '.csv')
@@ -100,6 +116,24 @@ def plot_weekly_potefficiency(plot_start, plot_end, run_period):
     # Reduce the dataframe to only the rows that overlap with the plot range
     mask = (livetime_df['start'] < plot_end) & (livetime_df['end'] > plot_start)
     livetime_df = livetime_df[mask].reset_index(drop=True)
+
+    if rebin:
+        # Do a rebinning of the dataframe 
+        livetime_df = livetime_df.sort_values('start').reset_index(drop=True)
+        rebinned_rows = []
+        for i in range(0, len(livetime_df), rebin):
+            chunk = livetime_df.iloc[i:i+rebin]
+            if len(chunk) == 0:
+                continue
+            rebinned_row = {
+                'start': chunk['start'].min(),
+                'end': chunk['end'].max(),
+                'delivered_pot': chunk['delivered_pot'].sum(),
+                'collected_pot': chunk['collected_pot'].sum(),
+            }
+            rebinned_rows.append(rebinned_row)
+        livetime_df = pd.DataFrame(rebinned_rows)
+
 
     # Figure creation for POT delivered and collected
     figure = plt.figure(figsize=(12, 5))
@@ -127,7 +161,8 @@ def plot_weekly_potefficiency(plot_start, plot_end, run_period):
 
     # Set axis limits
     ax.set_xlim(plot_start, plot_end)
-    ax.set_ylim(0, 0.60)
+    ymax = ax.get_ylim()[1]
+    ax.set_ylim(0, ymax*1.4)
 
     # Add a legend, but add statistics showing the total delivered POT,
     # collected POT, and the collection efficiency
@@ -137,13 +172,13 @@ def plot_weekly_potefficiency(plot_start, plot_end, run_period):
     collection_efficiency = total_collected_pot / total_delivered_pot
 
     # Add the average livetime to the legend, but with a "blank" handle
-    h.append(plt.Line2D([0], [0], color='white', lw=0))
-    l.append(f'Total Collected POT: {total_collected_pot*1e12:.2e}'.replace('+', ''))
-    h.append(plt.Line2D([0], [0], color='white', lw=0))
-    l.append(f'Total Delivered POT: {total_delivered_pot*1e12:.2e}'.replace('+', ''))
-    h.append(plt.Line2D([0], [0], color='white', lw=0))
-    l.append(f'Collection Efficiency: {collection_efficiency:.1%}')
-    ax.legend(h, l)
+    h.insert(0, plt.Line2D([0], [0], color='white', lw=0))
+    l.insert(0, f'Total Collected POT: {total_collected_pot*1e12:.2e}'.replace('+', ''))
+    h.insert(0, plt.Line2D([0], [0], color='white', lw=0))
+    l.insert(0, f'Total Delivered POT: {total_delivered_pot*1e12:.2e}'.replace('+', ''))
+    h.insert(0, plt.Line2D([0], [0], color='white', lw=0))
+    l.insert(0, f'Collection Efficiency: {collection_efficiency:.1%}')
+    ax.legend(h, l, ncol=2, fontsize=14)
 
     # Title
     _ = ax.set_title('SBND Collection Efficiency')
