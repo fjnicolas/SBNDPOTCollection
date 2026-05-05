@@ -6,3 +6,4 @@ redis_settings.py
 plots/*pdf
 plots/*png
 venv-sbndpot/*
+log

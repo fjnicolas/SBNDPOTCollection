@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta, timezone
 
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter, DayLocator, HourLocator
 import matplotlib.dates as mdates
@@ -43,6 +45,7 @@ def plot_weekly_livetime(plot_start, plot_end, run_period, rebin = 1):
             }
             rebinned_rows.append(rebinned_row)
         livetime_df = pd.DataFrame(rebinned_rows)
+
 
     # Figure creation
     figure = plt.figure(figsize=(12, 5))
